@@ -17,6 +17,8 @@ const app = express();
 //        https://medium.com/factory-mind/websocket-node-js-express-step-by-step-using-typescript-725114ad5fe4 (not using typescript)
 //        https://gist.github.com/jfromaniello/8418116
 
+app.use("/", require("./routes/index"));
+
 app.get('/ping', function (req, res) {
   // Example route to test react application proxy
   return res.send('pong');
