@@ -1,3 +1,5 @@
+![Superbot](/client/src/assets/images/logo.svg)
+
 ## About this
 Web Panel for [Guilded Superbot](https://github.com/Osamu01/superbot)
 
