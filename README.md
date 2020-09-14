@@ -7,7 +7,7 @@ Front-end is a Single Page Application (SPA) using React
 
 ### Back End
 The back-end server for this application can be found in [/server](/server)
-Back-end is an NodeJS powered by ExpressJS framework. It will act as a RESTAPI and WebSocket server.
+Back-end is a http server made in NodeJS powered by ExpressJS framework. It will act as a REST API and WebSocket server.
 
 ### More Info
 For more information on the different parts of this project please view the respective READMEs in each folder.
