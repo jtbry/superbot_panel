@@ -61,6 +61,10 @@ class Login extends React.Component {
         <Redirect to="/dashboard" />
       )
     } else {
+      let possibleMessage = undefined;
+      if(this.props.location.state) {
+        possibleMessage = this.props.location.state.message;
+      }
       return(
         <Container className="mt-5">
           {this.state.error !== undefined &&
@@ -68,9 +72,9 @@ class Login extends React.Component {
               <strong>Oops!</strong> {this.state.error}
             </Alert>
           }
-          {this.props.location.state.message !== undefined &&
-            <Alert variant={this.props.location.state.message.type}>
-              <strong>Oops!</strong> {this.props.location.state.message.content}
+          {possibleMessage !== undefined &&
+            <Alert variant={possibleMessage.type}>
+              <strong>Oops!</strong> {possibleMessage.content}
             </Alert>
           }
           <Card>
