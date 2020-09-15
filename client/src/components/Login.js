@@ -1,8 +1,10 @@
 import React from 'react';
+import Axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
 import LoginImage from '../assets/images/login_image.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
@@ -10,12 +12,49 @@ import './Login.css';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+    this.loginSubmit = this.loginSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      error: undefined,
+      username: "",
+      password: "",
+    };
+  }
+
+  loginSubmit() {
+    if(this.state.username.length < 3 || this.state.password.length < 3) {
+      this.setState({error: "Invalid login details"});
+    } else {
+      Axios.post("/api/user/login", {
+        "username": this.state.username,
+        "password": this.state.password
+      }).then((res) => {
+        if(res.status === 200) {
+          this.props.history.push("/panel");
+        } else {
+          this.setState({error: "Invalid login details"});
+        }
+      }).catch((err) => {
+        this.setState({error: "Unable to login"});
+        console.log(err);
+      });
+    }
+  }
+
+  handleChange({target}) {
+    this.setState({
+      [target.name]: target.value
+    })
   }
 
   render() {
     return(
       <Container className="mt-5">
+        {this.state.error !== undefined &&
+          <Alert variant="danger">
+            <strong>Oops!</strong> {this.state.error}
+          </Alert>
+        }
         <Card>
           <Card.Body>
             <div className="login-header">
@@ -25,13 +64,13 @@ class Login extends React.Component {
             <Form>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="text" placeholder="Username" />
+                <Form.Control name="username" value={this.state.username} onChange={this.handleChange} type="text" placeholder="Username" />
               </Form.Group>
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control name="password" value={this.state.password} onChange={this.handleChange} type="password" placeholder="Password" />
               </Form.Group>
-              <Button variant="login" type="submit" size="lg" block>
+              <Button variant="login" type="button" size="lg" block onClick={this.loginSubmit}>
                 Login
               </Button>
             </Form>

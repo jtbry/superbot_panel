@@ -5,6 +5,7 @@
 */
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 // TODO: For RuneScape Plugin
 //        api routes for posting data
@@ -17,6 +18,8 @@ const app = express();
 //        https://medium.com/factory-mind/websocket-node-js-express-step-by-step-using-typescript-725114ad5fe4 (not using typescript)
 //        https://gist.github.com/jfromaniello/8418116
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use("/", require("./routes/index"));
 
 app.get('/ping', function (req, res) {
