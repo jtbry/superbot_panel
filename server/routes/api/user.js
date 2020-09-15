@@ -19,7 +19,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/me", (req, res) => {
-    console.log(req.session);
+    // TODO: Maybe set a JWT cookie too to allow persistent login (even if server restarts etc)
     if(req.session.user) {
         res.sendStatus(200).end();
     } else {
