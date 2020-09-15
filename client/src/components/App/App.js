@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from '../Login/Login';
-import Panel from '../Panel/Panel';
+import Dashboard from '../Dashboard/Dashboard';
+import Bot from '../Bot/Bot';
 import NoMatch from './NoMatch';
 import './App.css';
 import AuthRoute from "../AuthRoute";
@@ -12,7 +13,8 @@ function App() {
   return(
     <Router>
       <Switch>
-        <AuthRoute path = "/panel" component={Panel} />
+        <AuthRoute path = "/dashboard" component={Dashboard} />
+        <AuthRoute path = "/bot/:id" component={Bot} />
         <Route exact path="/" component={Login} />
         <Route component={NoMatch} />
       </Switch>

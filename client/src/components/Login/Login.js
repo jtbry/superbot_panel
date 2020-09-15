@@ -34,7 +34,7 @@ class Login extends React.Component {
         "password": this.state.password
       }).then((res) => {
         if(res.status === 200) {
-          this.props.history.push("/panel");
+          this.props.history.push("/dashboard");
         } else {
           this.setState({username: "", password: "", error: "Invalid login details", loginBtnDisabled: false});
         }
@@ -58,7 +58,7 @@ class Login extends React.Component {
   render() {
     if(this.state.loggedIn) {
       return(
-        <Redirect to="/panel" />
+        <Redirect to="/dashboard" />
       )
     } else {
       return(
@@ -66,6 +66,11 @@ class Login extends React.Component {
           {this.state.error !== undefined &&
             <Alert variant="danger">
               <strong>Oops!</strong> {this.state.error}
+            </Alert>
+          }
+          {this.props.location.state.message !== undefined &&
+            <Alert variant={this.props.location.state.message.type}>
+              <strong>Oops!</strong> {this.props.location.state.message.content}
             </Alert>
           }
           <Card>

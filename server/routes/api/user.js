@@ -18,6 +18,11 @@ router.post("/login", (req, res) => {
         });
 });
 
+router.get("/logout", (req, res) => {
+    req.session.destroy();
+    return res.sendStatus(200).end();
+});
+
 router.get("/me", (req, res) => {
     // TODO: Maybe set a JWT cookie too to allow persistent login (even if server restarts etc)
     if(req.session.user) {

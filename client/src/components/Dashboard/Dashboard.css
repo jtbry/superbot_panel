@@ -1,0 +1,10 @@
+.pageContent {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 2rem;
+}
+
+.half-width {
+  width: 45%;
+  margin: 1%;
+}
