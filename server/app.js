@@ -6,11 +6,12 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const session = require('express-session')
+const SESSION_SECRET = "placeholder";
 
 // TODO: For RuneScape Plugin
 //        api routes for posting data
 // TODO: For Panel Front-End
-//        api routes for logging in
 //        api routes for bot management and creation
 // TODO: For Bot Communication
 //        create websocket server and management connections
@@ -20,6 +21,7 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 }, saveUninitialized: false, resave: false}));
 app.use("/", require("./routes/index"));
 
 app.get('/ping', function (req, res) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -18,6 +19,7 @@ class Login extends React.Component {
       error: undefined,
       username: "",
       password: "",
+      loggedIn: false
     };
   }
 
@@ -32,11 +34,15 @@ class Login extends React.Component {
         if(res.status === 200) {
           this.props.history.push("/panel");
         } else {
-          this.setState({error: "Invalid login details"});
+          this.setState({username: "", password: "", error: "Invalid login details"});
         }
       }).catch((err) => {
-        this.setState({error: "Unable to login"});
-        console.log(err);
+        if(err.response.status === 403) {
+          this.setState({username: "", password: "", error: "Invalid login details"});
+        } else {
+          this.setState({error: "Unable to login"});
+          console.log(err);
+        }
       });
     }
   }
@@ -48,36 +54,54 @@ class Login extends React.Component {
   }
 
   render() {
-    return(
-      <Container className="mt-5">
-        {this.state.error !== undefined &&
-          <Alert variant="danger">
-            <strong>Oops!</strong> {this.state.error}
-          </Alert>
-        }
-        <Card>
-          <Card.Body>
-            <div className="login-header">
-              <h3>Superbot Controls Login</h3>
-              <img src={LoginImage} className="login-logo" alt="Super Bot Login" />
-            </div>
-            <Form>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Username</Form.Label>
-                <Form.Control name="username" value={this.state.username} onChange={this.handleChange} type="text" placeholder="Username" />
-              </Form.Group>
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control name="password" value={this.state.password} onChange={this.handleChange} type="password" placeholder="Password" />
-              </Form.Group>
-              <Button variant="login" type="button" size="lg" block onClick={this.loginSubmit}>
-                Login
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Container>
-    );
+    if(this.state.loggedIn) {
+      return(
+        <Redirect to="/panel" />
+      )
+    } else {
+      return(
+        <Container className="mt-5">
+          {this.state.error !== undefined &&
+            <Alert variant="danger">
+              <strong>Oops!</strong> {this.state.error}
+            </Alert>
+          }
+          <Card>
+            <Card.Body>
+              <div className="login-header">
+                <h3>Superbot Controls Login</h3>
+                <img src={LoginImage} className="login-logo" alt="Super Bot Login" />
+              </div>
+              <Form>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control name="username" value={this.state.username} onChange={this.handleChange} type="text" placeholder="Username" />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control name="password" value={this.state.password} onChange={this.handleChange} type="password" placeholder="Password" />
+                </Form.Group>
+                <Button variant="login" type="button" size="lg" block onClick={this.loginSubmit}>
+                  Login
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Container>
+      );
+    }
+  }
+
+  componentDidMount() {
+    Axios.get("/api/user/me")
+    .then((result) => {
+      if(result.status === 200) {
+        this.setState({loggedIn: true});
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 }
 
