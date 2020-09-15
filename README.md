@@ -1,4 +1,4 @@
-![Superbot](/client/src/assets/images/logo.svg =192x192)
+![Superbot](/client/public/logo192.png)
 
 ## About this
 Web Panel for [Guilded Superbot](https://github.com/Osamu01/superbot)
