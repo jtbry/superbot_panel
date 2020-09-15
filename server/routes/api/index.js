@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-router.use("/osrs-plugin", require("./osrs-plugin/index"));
-router.use("/user", require("./user/index"));
+router.use("/osrs-plugin", require("./osrs"));
+router.use("/user", require("./user"));
 
 module.exports = router;
