@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import PageNotFound from "../assets/images/page_not_found.svg";
+import PageNotFound from "../../assets/images/page_not_found.svg";
 
 class NoMatch extends React.Component {
   constructor(props) {

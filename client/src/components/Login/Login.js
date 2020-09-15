@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import LoginImage from '../assets/images/login_image.svg';
+import LoginImage from '../../assets/images/login_image.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
 
@@ -19,11 +19,13 @@ class Login extends React.Component {
       error: undefined,
       username: "",
       password: "",
-      loggedIn: false
+      loggedIn: false,
+      loginBtnDisabled: false
     };
   }
 
   loginSubmit() {
+    this.setState({loginBtnDisabled: true})
     if(this.state.username.length < 3 || this.state.password.length < 3) {
       this.setState({error: "Invalid login details"});
     } else {
@@ -34,13 +36,13 @@ class Login extends React.Component {
         if(res.status === 200) {
           this.props.history.push("/panel");
         } else {
-          this.setState({username: "", password: "", error: "Invalid login details"});
+          this.setState({username: "", password: "", error: "Invalid login details", loginBtnDisabled: false});
         }
       }).catch((err) => {
         if(err.response.status === 403) {
-          this.setState({username: "", password: "", error: "Invalid login details"});
+          this.setState({username: "", password: "", error: "Invalid login details", loginBtnDisabled: false});
         } else {
-          this.setState({error: "Unable to login"});
+          this.setState({error: "Unable to login", loginBtnDisabled: false});
           console.log(err);
         }
       });
@@ -81,7 +83,7 @@ class Login extends React.Component {
                   <Form.Label>Password</Form.Label>
                   <Form.Control name="password" value={this.state.password} onChange={this.handleChange} type="password" placeholder="Password" />
                 </Form.Group>
-                <Button variant="login" type="button" size="lg" block onClick={this.loginSubmit}>
+                <Button variant="login" type="button" size="lg" block onClick={this.loginSubmit} disabled={this.state.loginBtnDisabled}>
                   Login
                 </Button>
               </Form>

@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import Loading from './components/Loading'; 
+import Loading from './Loading'; 
 
 class AuthRoute extends React.Component {
   constructor(props) {
