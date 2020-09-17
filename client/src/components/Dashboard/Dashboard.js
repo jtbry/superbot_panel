@@ -1,9 +1,12 @@
 import React from 'react';
+import {useState} from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Loading from '../Loading';
+import NewBotModal from './NewBotModal';
+import ExistingBots from './ExistingBots';
 import './Dashboard.css';
 import Axios from 'axios';
 
@@ -18,8 +21,11 @@ function Logout(history) {
 }
 
 function Dashboard(props) {
+  const [showBotModal, setShowBotModal] = useState(false);
+
   return(
     <div className="pageContent">
+      <NewBotModal show={showBotModal} close={() => {setShowBotModal(false)}} />
       <Row>
         <Col lg={9}>
           <Card>
@@ -27,7 +33,10 @@ function Dashboard(props) {
               Existing Bots
             </Card.Header>
             <Card.Body>
-              <Loading />
+              <ExistingBots />
+              <div className="mt-1">
+                <Button variant="success" onClick={() => {setShowBotModal(true)}} className="float-right">Add New Bot</Button>
+              </div>
             </Card.Body>
           </Card>
         </Col>
@@ -41,7 +50,7 @@ function Dashboard(props) {
             </Card.Body>
           </Card>
           <div className="mt-1">
-            <Button variant="success" className="float-left half-width">Add New</Button>
+            <Button variant="success" className="float-left half-width">Add New User</Button>
             <Button variant="danger" onClick={() => { Logout(props.history); }} className="float-right half-width">Logout</Button>
           </div>
         </Col>

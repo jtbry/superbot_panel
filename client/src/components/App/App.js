@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from '../Login/Login';
 import Dashboard from '../Dashboard/Dashboard';
 import Bot from '../Bot/Bot';
-import NoMatch from './NoMatch';
+import NoMatch from '../Errors/NoMatch';
 import './App.css';
 import AuthRoute from "../AuthRoute";
 

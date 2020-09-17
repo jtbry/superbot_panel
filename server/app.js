@@ -3,10 +3,13 @@
 
   Superbot back-end entry point
 */
+const http = require("http");
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session')
+const websocket = require('./websocket_server');
+const log = require('./helpers/log');
+const app = express();
 const SESSION_SECRET = "placeholder";
 
 // TODO: For RuneScape Plugin
@@ -24,9 +27,8 @@ app.use(bodyParser.json());
 app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 }, saveUninitialized: false, resave: false}));
 app.use("/", require("./routes/index"));
 
-app.get('/ping', function (req, res) {
-  // Example route to test react application proxy
-  return res.send('pong');
+const server = http.createServer(app);
+server.listen(process.env.PORT || 8080, () => {
+  log.Info("App", `API Listening on ${process.env.PORT || 8080}`);
+  websocket.startWebsocketServer(server);
 });
-
-app.listen(process.env.PORT || 8080);

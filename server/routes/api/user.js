@@ -1,3 +1,7 @@
+/**
+ * Routes relating to users
+ */
+
 const router = require("express").Router();
 const db = require("../../helpers/database");
 
