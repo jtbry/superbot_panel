@@ -10,6 +10,7 @@ function startWebsocketServer(server) {
 function handleWsConnection(ws) {
   // Wait for authenticate event
   let isAuth = false;
+  let code = undefined;
   ws.on("message", (data) => {
     let message = JSON.parse(data);
     if(message.event == "authenticate") {
@@ -18,6 +19,7 @@ function handleWsConnection(ws) {
         .then((row) => {
           if(row) {
             isAuth = true;
+            code = row.code;
             onAuthClientConnected(ws, row.code);
           } else {
             log.Warn(`WebSocket`, `${ws._socket.remoteAddress} failed authentication w/ ${message.data}`);
@@ -32,7 +34,7 @@ function handleWsConnection(ws) {
       // If message sent w/o auth disconnect
       ws.terminate();
     } else {
-      processWsMessage(ws, message);
+      processWsMessage(ws, code, message);
     }
   });
 
@@ -50,27 +52,65 @@ function handleWsConnection(ws) {
   }, 5000);
 }
 
+const authClients = [];
 function onAuthClientConnected(ws, code) {
+  // testing client side service
+  ws.send(JSON.stringify({
+    event: "test_event",
+    data: "test message"
+  }));
+
   // Update data for this client (logged_in, ip)
-  log.Info(`WebSocket`, `${ws._socket.remoteAddress} has authenticated with ${code}`);
+  log.Info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) connected`);
+  authClients.push({code: code, ws: ws});
   db.run("UPDATE Bots SET last_online = ?, is_online = 1, last_ip = ? WHERE code = ?", [Date.now(), ws._socket.remoteAddress, code])
     .catch((err) => {
       log.Error("WebSocket", `Auth Connect Error ${code}`, err);
+      ws.terminate();
     })
 
   // Handle when an auth client dc
   ws.on("close", () => {
+    log.Info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) disconnected`);
+    for(let i = 0; i < authClients.length; i++) {
+      if(authClients[i].code == code) {
+        authClients.splice(i, 1);
+        break;
+      }
+    }
     db.run("UPDATE Bots SET last_online = ?, is_online = 0 WHERE code = ?", [Date.now(), code])
       .catch((err) => {
         log.Error("WebSocket", `Auth DC Error ${code}`, err);
+        ws.terminate();
       });
   });
 }
 
-function processWsMessage(ws, message) {
-  console.log(`Auth'd Message: ${message.data}`);
+function processWsMessage(ws, code, message) {
+  console.log(`Auth'd Message: ${JSON.stringify(message)}`);
+}
+
+/**
+ * Send an event to a connected (auth'd) client
+ * 
+ * @param {string} code Code to identify client
+ * @param {string} event Event to send to client
+ * @param {Any} data Data to send with event
+ */
+function sendEventToBot(code, event, data) {
+  // TODO: should probably be a promise that resolves/rejects with success/error
+  for(let i = 0; i < authClients.length; i++) {
+    if(authClients[i].code == code) {
+      authClients[i].ws.send(JSON.stringify({
+        event: event,
+        data: data
+      }));
+      return;
+    }
+  }
 }
 
 module.exports = {
-  startWebsocketServer
+  startWebsocketServer,
+  sendEventToBot
 }
