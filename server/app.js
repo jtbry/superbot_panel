@@ -1,8 +1,3 @@
-/*
-  app.js
-
-  Superbot back-end entry point
-*/
 const http = require("http");
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -10,7 +5,7 @@ const session = require('express-session')
 const websocket = require('./websocket_server');
 const log = require('./helpers/log');
 const app = express();
-const SESSION_SECRET = "placeholder";
+const sessionSecret = process.env.sessionSecret || "placeholder";
 
 // TODO: For RuneScape Plugin
 //        api routes for posting data
@@ -24,7 +19,7 @@ const SESSION_SECRET = "placeholder";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 }, saveUninitialized: false, resave: false}));
+app.use(session({ secret: sessionSecret, cookie: { maxAge: 60000 }, saveUninitialized: false, resave: false}));
 app.use("/", require("./routes/index"));
 
 const server = http.createServer(app);

@@ -8,13 +8,17 @@
     "chalk": "^4.1.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
     "socket.io": "^2.3.0",
     "sqlite3": "^5.0.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx sequelize-cli db:migrate && node app.js",
+    "dev": "npx sequelize-cli db:migrate && nodemon app.js",
+    "migrations": "npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",

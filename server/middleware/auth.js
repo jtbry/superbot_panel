@@ -1,4 +1,4 @@
-function AuthMiddleware(req, res, next) {
+function authMiddleware(req, res, next) {
   if(req.session.user) {
     next();
   } else {
@@ -6,4 +6,4 @@ function AuthMiddleware(req, res, next) {
   }
 }
 
-module.exports = AuthMiddleware;
+module.exports = authMiddleware;

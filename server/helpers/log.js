@@ -6,8 +6,8 @@ const chalk = require("chalk");
  * @param {string} prefix Prefix to message
  * @param {string} string Message to output
  */
-function Info(prefix, message) {
-    console.log(`${chalk.gray(`[INFO] ${prefix} |`)} ${message}`);
+function info(prefix, message) {
+  console.log(`${chalk.gray(`[INFO] ${prefix} |`)} ${message}`);
 }
 
 /**
@@ -16,8 +16,8 @@ function Info(prefix, message) {
  * @param {string} prefix Prefix to message
  * @param {string} string Message to output
  */
-function Warn(prefix, message) {
-    console.log(`${chalk.yellow(`[WARN] ${prefix} |`)} ${message}`);
+function warn(prefix, message) {
+  console.log(`${chalk.yellow(`[WARN] ${prefix} |`)} ${message}`);
 }
 
 /**
@@ -25,12 +25,13 @@ function Warn(prefix, message) {
  * 
  * @param {string} prefix Prefix to message
  * @param {string} string Message to output
+ * @param {Any} error Optional error to display
  */
-function Error(prefix, message, error) {
-    console.log(`${chalk.red(`[ERROR] ${prefix} |`)} ${message}`);
-    if(error) {
-        console.log(`   ${error}`);
-    }
+function error(prefix, message, error) {
+  console.log(`${chalk.red(`[ERROR] ${prefix} |`)} ${message}`);
+  if(error) {
+    console.log(`   ${error}`);
+  }
 }
 
 /**
@@ -38,18 +39,19 @@ function Error(prefix, message, error) {
  * 
  * @param {string} prefix Prefix to message
  * @param {string} string Message to output
+ * @param {Any} error Optional error to display
  */
-function Fatal(prefix, message, error) {
-    console.log(`${chalk.redBright(`[FATAL] ${prefix} |`)} ${message}`);
-    if(error) {
-        console.log(`   ${error}`);
-    }
-    process.exit(-1);
+function fatal(prefix, message, error) {
+  console.log(`${chalk.redBright(`[FATAL] ${prefix} |`)} ${message}`);
+  if(error) {
+    console.log(`   ${error}`);
+  }
+  process.exit(-1);
 }
 
 module.exports = {
-    Info,
-    Warn,
-    Error,
-    Fatal
+  info,
+  warn,
+  error,
+  fatal
 }

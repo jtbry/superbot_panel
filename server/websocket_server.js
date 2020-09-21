@@ -1,7 +1,12 @@
 const WebSocket = require("ws");
 const log = require("./helpers/log");
-const db = require("./helpers/database");
+const bot = require("./models/bot");
 
+/**
+ * Start the websocket server
+ * 
+ * @param {Object} server HTTP server to run off
+ */
 function startWebsocketServer(server) {
   const wss = new WebSocket.Server({server});
   wss.on("connection", handleWsConnection)
@@ -15,7 +20,9 @@ function handleWsConnection(ws) {
     let message = JSON.parse(data);
     if(message.event == "authenticate") {
       // Authenticate client
-      db.get("SELECT * FROM Bots WHERE code = ?", [message.data])
+      bot.findOne(
+        {where: {code: message.data}}
+      )
         .then((row) => {
           if(row) {
             isAuth = true;
@@ -63,7 +70,10 @@ function onAuthClientConnected(ws, code) {
   // Update data for this client (logged_in, ip)
   log.Info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) connected`);
   authClients.push({code: code, ws: ws});
-  db.run("UPDATE Bots SET last_online = ?, is_online = 1, last_ip = ? WHERE code = ?", [Date.now(), ws._socket.remoteAddress, code])
+  bot.update(
+    {last_online: Date.now(), is_online: 1, last_ip: ws._socket.remoteAddress},
+    {where: {code: code}}
+  )
     .catch((err) => {
       log.Error("WebSocket", `Auth Connect Error ${code}`, err);
       ws.terminate();
@@ -78,7 +88,10 @@ function onAuthClientConnected(ws, code) {
         break;
       }
     }
-    db.run("UPDATE Bots SET last_online = ?, is_online = 0 WHERE code = ?", [Date.now(), code])
+    bot.update(
+      {last_online: Date.now(), is_online: 0},
+      {where: {code: code}}
+    )
       .catch((err) => {
         log.Error("WebSocket", `Auth DC Error ${code}`, err);
         ws.terminate();
