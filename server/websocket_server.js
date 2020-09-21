@@ -29,13 +29,13 @@ function handleWsConnection(ws) {
             code = row.code;
             onAuthClientConnected(ws, row.code);
           } else {
-            log.Warn(`WebSocket`, `${ws._socket.remoteAddress} failed authentication w/ ${message.data}`);
+            log.warn(`WebSocket`, `${ws._socket.remoteAddress} failed authentication w/ ${message.data}`);
             isAuth = false;
           }
         })
         .catch((error) => {
           isAuth = false;
-          log.Error("WebSocket", "Database Error When Authenticating", error);
+          log.error("WebSocket", "Database Error When Authenticating", error);
         });
     } else if(!isAuth) {
       // If message sent w/o auth disconnect
@@ -68,20 +68,20 @@ function onAuthClientConnected(ws, code) {
   }));
 
   // Update data for this client (logged_in, ip)
-  log.Info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) connected`);
+  log.info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) connected`);
   authClients.push({code: code, ws: ws});
   bot.update(
     {last_online: Date.now(), is_online: 1, last_ip: ws._socket.remoteAddress},
     {where: {code: code}}
   )
     .catch((err) => {
-      log.Error("WebSocket", `Auth Connect Error ${code}`, err);
+      log.error("WebSocket", `Auth Connect Error ${code}`, err);
       ws.terminate();
     })
 
   // Handle when an auth client dc
   ws.on("close", () => {
-    log.Info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) disconnected`);
+    log.info(`WebSocket`, `${ws._socket.remoteAddress} (${code}) disconnected`);
     for(let i = 0; i < authClients.length; i++) {
       if(authClients[i].code == code) {
         authClients.splice(i, 1);
@@ -93,7 +93,7 @@ function onAuthClientConnected(ws, code) {
       {where: {code: code}}
     )
       .catch((err) => {
-        log.Error("WebSocket", `Auth DC Error ${code}`, err);
+        log.error("WebSocket", `Auth DC Error ${code}`, err);
         ws.terminate();
       });
   });

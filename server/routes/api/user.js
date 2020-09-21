@@ -15,7 +15,7 @@ router.post("/login", (req, res) => {
       }
     })
     .catch((err) => {
-      log.Error("UserApi", "Unable to login user", err);
+      log.error("UserApi", "Unable to login user", err);
       return res.sendStatus(500).end();
     });
 });

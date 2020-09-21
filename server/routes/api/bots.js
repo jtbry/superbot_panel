@@ -13,7 +13,7 @@ router.get("/list", (req, res) => {
     })
     .catch((err) => {
       res.sendStatus(500).end();
-      log.Error("BotsApi", "Error getting bot list", err);
+      log.error("BotsApi", "Error getting bot list", err);
     });
 });
 
@@ -32,7 +32,7 @@ router.post("/create", (req, res) => {
       })
       .catch((err) => {
         res.sendStatus(500).end();
-        log.Error("BotsApi", "Error creating bot code", err);
+        log.error("BotsApi", "Error creating bot code", err);
       });
   }
 });

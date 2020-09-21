@@ -17,7 +17,7 @@ Module exports should be done as a single export in the case of default export o
 ## Migrations
 Any changes to the database will be tracked and applied via a migrations sytem. The ORM library we are using is called Sequelize.
 Tables will be accessed through their respective models, a table's model should reflect any changes made via migrations.
-To apply migrations you can run `npm migrations` or `npx sequelize-cli db:migrate`
+To apply migrations you can run `npm run migrations` or `npx sequelize-cli db:migrate`
 
 More sequelize info available here:
   * [Manual / Guides](https://sequelize.org/master/)
@@ -30,7 +30,7 @@ More sequelize info available here:
 ##### Options 1. NPM Scripts
 `npm start` - Will apply pending migrations and start the app using `node`
 
-`npm dev` - Will apply existing migrations and start the app using `nodemon`
+`npm run dev` - Will apply pending migrations and start the app using `nodemon`
 
 #### Options 2. Manually
 `node ./app.js` Will **not** apply pending migrations and will run using `node`

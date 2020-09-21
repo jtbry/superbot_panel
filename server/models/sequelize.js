@@ -10,9 +10,9 @@ const sequelize = new Sequelize({
 async function testConnection() {
   try {
     await sequelize.authenticate();
-    log.Info("Sequelize", "Connected to Database");
+    log.info("Sequelize", "Connected to Database");
   } catch(err) {
-    log.Fatal("Sequelize", "Unable to connect to Database", err);
+    log.fatal("Sequelize", "Unable to connect to Database", err);
   }
 }
 
