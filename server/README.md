@@ -8,6 +8,12 @@ JSDoc comments on all exported functions.
 
 camelCase for all variable and function names. 
 
+Use promises over callbacks when able to.
+
+All indentation should be two spaces.
+
+Module exports should be done as a single export in the case of default export or as a single json object in the case of multiple exports.
+
 ## Migrations
 Any changes to the database will be tracked and applied via a migrations sytem. The ORM library we are using is called Sequelize.
 Tables will be accessed through their respective models, a table's model should reflect any changes made via migrations.
