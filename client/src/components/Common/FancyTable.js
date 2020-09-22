@@ -2,30 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Pagination from 'react-bootstrap/Pagination';
-
-function levenshteinDistance(a, b) {
-  // calculate the edit distance between two strings (case insensitive)
-  // https://en.wikipedia.org/wiki/Levenshtein_distance
-  a = a.toLowerCase();
-  b = b.toLowerCase();
-  let costs = [];
-  for(let i = 0; i <= a.length; i++) {
-    let lastValue = i;
-    for(let j = 0; j <= b.length; j++) {
-      if(i === 0) costs[j] = j;
-      else {
-        if(j > 0) {
-          let newValue = costs[j-1];
-          if(a.charAt(i - 1) !== b.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-          costs[j-1] = lastValue;
-          lastValue = newValue;
-        }
-      }
-    }
-    if(i > 0) costs[b.length] = lastValue;
-  }
-  return costs[b.length];
-}
+import levenshtein from 'js-levenshtein';
 
 class FancyTable extends React.Component {
   constructor(props) {
@@ -43,10 +20,14 @@ class FancyTable extends React.Component {
       let shouldShow = false;
       let bestDist = undefined;
       for(let j = 0; j < this.props.searchable.length; j++) {
-        let checkValue = String(this.props.data[i][this.props.searchable[j]]);
-        let dist = levenshteinDistance(checkValue, value);
+        let checkValue = this.props.data[i][this.props.searchable[j]];
+        if(!checkValue || checkValue === "N/A") continue;
+        checkValue = String(checkValue);
+        let dist = levenshtein(checkValue, value);
         if(dist < checkValue.length) shouldShow = true;
-        if(!bestDist || dist < bestDist) bestDist = dist;
+        if(bestDist === undefined || dist < bestDist) {
+          bestDist = dist;
+        }
       }
       if(shouldShow) {
         let newData = this.props.data[i];
