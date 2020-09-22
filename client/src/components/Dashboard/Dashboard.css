@@ -8,3 +8,15 @@
   width: 45%;
   margin: 1%;
 }
+
+th {
+  background-color: #545454;
+  color: #f0efef;
+  border-color: #2e2e2e !important;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+td {
+  background-color: #fafafa;
+}

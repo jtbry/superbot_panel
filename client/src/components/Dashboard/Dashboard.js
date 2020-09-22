@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import Loading from '../Loading';
+import Loading from '../Common/Loading';
 import NewBotModal from './NewBotModal';
 import ExistingBots from './ExistingBots';
 import './Dashboard.css';
@@ -22,10 +22,11 @@ function Logout(history) {
 
 function Dashboard(props) {
   const [showBotModal, setShowBotModal] = useState(false);
+  const [botReloads, setBotReloads] = useState(1);
 
   return(
     <div className="pageContent">
-      <NewBotModal show={showBotModal} close={() => {setShowBotModal(false)}} />
+      <NewBotModal show={showBotModal} refreshData={() => {setBotReloads(botReloads + 1)}} close={() => {setShowBotModal(false)}} />
       <Row>
         <Col lg={9}>
           <Card>
@@ -33,7 +34,7 @@ function Dashboard(props) {
               Existing Bots
             </Card.Header>
             <Card.Body>
-              <ExistingBots />
+              <ExistingBots key={botReloads} />
               <div className="mt-1">
                 <Button variant="success" onClick={() => {setShowBotModal(true)}} className="float-right">Add New Bot</Button>
               </div>

@@ -9,14 +9,14 @@ import { withRouter } from 'react-router-dom';
 class NewBotModal extends React.Component {
   constructor(props) {
     super(props);
-    this.MakeNewBot = this.MakeNewBot.bind(this);
+    this.makeNewBot = this.makeNewBot.bind(this);
     this.newBotName = "";
     // Dashboard alert will show on the dashboard even if the modal is closed.
     // Modal alert will only show on top of the modal.
     this.state = {modalAlert: undefined, dashboardAlert: undefined};
   }
 
-  MakeNewBot() {
+  makeNewBot() {
     if(this.newBotName.length <= 3) {
       this.setState({modalAlert: {variant: "danger", text: "Bot name must be longer than 3 letters."}});
       return;
@@ -27,6 +27,7 @@ class NewBotModal extends React.Component {
     .then((response) => {
       this.setState({dashboardAlert: {variant: "success", text: `Made new bot ${this.newBotName} with code ${response.data}`}});
       this.props.close();
+      this.props.refreshData();
     })
     .catch((err) => {
       console.log(err);
@@ -62,7 +63,7 @@ class NewBotModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="mt-1">
-            <Button variant="success" onClick={this.MakeNewBot} className="float-left" style={{marginRight: "5px"}}>Add New Bot</Button>
+            <Button variant="success" onClick={this.makeNewBot} className="float-left" style={{marginRight: "5px"}}>Add New Bot</Button>
             <Button variant="danger" onClick={() => { this.props.close() }} className="float-right">Close</Button>
           </div>
         </Modal.Footer>

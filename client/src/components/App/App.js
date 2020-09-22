@@ -5,7 +5,7 @@ import Dashboard from '../Dashboard/Dashboard';
 import Bot from '../Bot/Bot';
 import NoMatch from '../Errors/NoMatch';
 import './App.css';
-import AuthRoute from "../AuthRoute";
+import AuthRoute from "../Common/AuthRoute";
 
 
 function App() {
